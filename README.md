@@ -36,6 +36,55 @@ This will place a file in the config directory that will manage your connection 
 ## Usage
 
 ``` php
+$proc = new \jdavidbakr\ProfitStars\ProcessTransaction;
+$trans = new \jdavidbakr\ProfitStars\WSTransaction;
+
+// Test connection
+if($proc->TestConnection()) {
+	// Success
+}
+
+// Test credentials
+if($proc->TestCredentials()) {
+	// Success
+}
+
+// AuthorizeTransaction
+$trans->RoutingNumber = 111000025;
+$trans->AccountNumber = 5637492437;
+$trans->TotalAmount = 9.95;
+$trans->TransactionNumber = 12334;
+$trans->NameOnAccount = 'Joe Smith';
+$trans->EffectiveDate = '2015-11-04';
+if($proc->AuthorizeTransaction($tras)) {
+	// ReferenceNumber in $proc->ReferenceNumber	
+} else {
+	// Error message in $proc->ResponseMessage
+}
+
+// CaptureTransaction
+$proc->ReferenceNumber = 'reference number';
+if($proc->CaptureTransaction(9.95)) {
+	// Success 
+} else {
+	// Error message in $proc->ResponseMessage
+}
+
+// VoidTransaction
+$proc->ReferenceNumber = 'reference number';
+if($proc->VoidTransaction()) {
+	// Success;
+} else {
+	// Error message in $proc->ResponseMessage
+}
+
+// RefundTransaction
+$proc->ReferenceNumber = 'reference number';
+if($proc->RefundTransaction()) {
+	// Success, refund info in $proc->ResponseMessage
+} else {
+	// Error message in $proc->ResponseMessage
+}
 
 ```
 
@@ -43,11 +92,6 @@ This will place a file in the config directory that will manage your connection 
 
 Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
 
-## Testing
-
-``` bash
-$ composer test
-```
 
 ## Contributing
 
