@@ -36,15 +36,13 @@ class ProcessTransaction extends RequestBase {
             return false;
         }
         if(!$xml->AuthorizeTransactionResult[0] || (string)$xml->AuthorizeTransactionResult[0]->Success[0] != 'true') {
-            if((string)$xml->AuthorizeTransactionResult[0]) {
+            if($xml->AuthorizeTransactionResult[0] && (string)$xml->AuthorizeTransactionResult[0]->ResponseMessage[0]) {
                 // Not sure if this is working, so I'm going to throw the XML into the logs in case
                 // I need to come back and see what it looks like.
                 logger($xml->asXML());
                 $this->ResponseMessage = (string)$xml->AuthorizeTransactionResult[0]->ResponseMessage[0];
             } else {
-                // Had an error with the authorize, but we don't really know what it is yet
-                // because I haven't figured out how to trigger this.
-                // Dumping the XML to the logs after triggering a 500 error.
+                // Had an error with the call that was not captured above, so let's log it and throw a 500 error for future development
                 logger:info($xml->asXML());
                 abort(500, "AuthorizeTransaction error occurred");
             }
@@ -70,15 +68,13 @@ class ProcessTransaction extends RequestBase {
             return false;
         }
         if(!$xml->CaptureTransactionResult[0] || (string)$xml->CaptureTransactionResult[0]->Success[0] != 'true') {
-            if((string)$xml->CaptureTransactionResult[0]) {
+            if($xml->CaptureTransactionResult[0] && (string)$xml->CaptureTransactionResult[0]->ResponseMessage[0]) {
                 // Not sure if this is working, so I'm going to throw the XML into the logs in case
                 // I need to come back and see what it looks like.
                 logger($xml->asXML());
                 $this->ResponseMessage = (string)$xml->CaptureTransactionResult[0]->ResponseMessage[0];
             } else {
-                // Had an error with the authorize, but we don't really know what it is yet
-                // because I haven't figured out how to trigger this.
-                // Dumping the XML to the logs after triggering a 500 error.
+                // Had an error with the call that was not captured above, so let's log it and throw a 500 error for future development
                 logger:info($xml->asXML());
                 abort(500, "CaptureTransaction error occurred");
             }
@@ -100,15 +96,13 @@ class ProcessTransaction extends RequestBase {
             return false;
         }
         if(!$xml->VoidTransactionResult[0] || (string)$xml->VoidTransactionResult[0]->Success[0] != 'true') {
-            if((string)$xml->VoidTransactionResult[0]) {
+            if($xml->VoidTransactionResult[0] && (string)$xml->VoidTransactionResult[0]->ResponseMessage[0]) {
                 // Not sure if this is working, so I'm going to throw the XML into the logs in case
                 // I need to come back and see what it looks like.
                 logger($xml->asXML());
                 $this->ResponseMessage = (string)$xml->VoidTransactionResult[0]->ResponseMessage[0];
             } else {
-                // Had an error with the authorize, but we don't really know what it is yet
-                // because I haven't figured out how to trigger this.
-                // Dumping the XML to the logs after triggering a 500 error.
+                // Had an error with the call that was not captured above, so let's log it and throw a 500 error for future development
                 logger:info($xml->asXML());
                 abort(500, "CaptureTransaction error occurred");
             }
@@ -133,15 +127,13 @@ class ProcessTransaction extends RequestBase {
             return false;
         }
         if(!$xml->RefundTransactionResult[0] || (string)$xml->RefundTransactionResult[0]->Success[0] != 'true') {
-            if((string)$xml->RefundTransactionResult[0]) {
+            if($xml->RefundTransactionResult[0] && (string)$xml->RefundTransactionResult[0]->ResponseMessage[0]) {
                 // Not sure if this is working, so I'm going to throw the XML into the logs in case
                 // I need to come back and see what it looks like.
                 logger($xml->asXML());
                 $this->ResponseMessage = (string)$xml->RefundTransactionResult[0]->ResponseMessage[0];
             } else {
-                // Had an error with the authorize, but we don't really know what it is yet
-                // because I haven't figured out how to trigger this.
-                // Dumping the XML to the logs after triggering a 500 error.
+                // Had an error with the call that was not captured above, so let's log it and throw a 500 error for future development
                 logger:info($xml->asXML());
                 abort(500, "CaptureTransaction error occurred");
             }

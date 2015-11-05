@@ -87,6 +87,9 @@ class ProcessTransactionTest extends TestCase
         $this->assertTrue($this->object->AuthorizeTransaction($trans), $this->object->ResponseMessage);
 
         $this->assertTrue($this->object->VoidTransaction(), $this->object->ResponseMessage);
+
+        // Seconrd attempt should fail
+        $this->assertFalse($this->object->VoidTransaction());
     }
 
     public function testRefundTransaction()
