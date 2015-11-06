@@ -15,6 +15,9 @@ class ProcessTransaction extends RequestBase {
     {
         $view = view('profitstars::process-transaction.test-connection');
         $xml = $this->Call($view);
+        if(!$xml) {
+            abont(500, $this->faultstring);
+        }
         return (bool)$xml->TestConnectionResult[0];
     }
 
@@ -22,6 +25,9 @@ class ProcessTransaction extends RequestBase {
     {
         $view = view('profitstars::process-transaction.test-credentials');
         $xml = $this->Call($view);
+        if(!$xml) {
+            abor t(500, $this->faultstring);
+        }
         return $xml->TestCredentialsResult[0]->returnValue[0] == 'Success';
     }
 
