@@ -26,7 +26,7 @@ class ProcessTransaction extends RequestBase {
         $view = view('profitstars::process-transaction.test-credentials');
         $xml = $this->Call($view);
         if(!$xml) {
-            abor t(500, $this->faultstring);
+            abort(500, $this->faultstring);
         }
         return $xml->TestCredentialsResult[0]->returnValue[0] == 'Success';
     }
