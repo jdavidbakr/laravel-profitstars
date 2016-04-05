@@ -34,8 +34,8 @@ class ProcessTransaction extends RequestBase {
     public function AuthorizeTransaction(WSTransaction $trans)
     {
         $view = view('profitstars::process-transaction.authorize-transaction',[
-                'trans'=>$trans,
-            ]);
+            'trans'=>$trans,
+        ]);
         $xml = $this->Call($view);
         if(!$xml) {
             $this->ResponseMessage = $this->faultstring;
@@ -65,9 +65,9 @@ class ProcessTransaction extends RequestBase {
     public function CaptureTransaction($amount)
     {
         $view = view('profitstars::process-transaction.capture-transaction',[
-                'captureAmount'=>$amount,
-                'originalReferenceNumber'=>$this->ReferenceNumber,
-            ]);
+            'captureAmount'=>$amount,
+            'originalReferenceNumber'=>$this->ReferenceNumber,
+        ]);
         $xml = $this->Call($view);
         if(!$xml) {
             $this->ResponseMessage = $this->faultstring;
@@ -94,8 +94,8 @@ class ProcessTransaction extends RequestBase {
     public function VoidTransaction()
     {
         $view = view('profitstars::process-transaction.void-transaction',[
-                'originalReferenceNumber'=>$this->ReferenceNumber,
-            ]);
+            'originalReferenceNumber'=>$this->ReferenceNumber,
+        ]);
         $xml = $this->Call($view);
         if(!$xml) {
             $this->ResponseMessage = $this->faultstring;
@@ -124,8 +124,8 @@ class ProcessTransaction extends RequestBase {
     public function RefundTransaction()
     {
         $view = view('profitstars::process-transaction.refund-transaction',[
-                'originalReferenceNumber'=>$this->ReferenceNumber,
-            ]);
+            'originalReferenceNumber'=>$this->ReferenceNumber,
+        ]);
         // dd($view->render());
         $xml = $this->Call($view);
         if(!$xml) {

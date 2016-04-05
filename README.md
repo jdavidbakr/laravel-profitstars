@@ -4,7 +4,7 @@
 [![Software License][ico-license]](LICENSE.md)
 [![Total Downloads][ico-downloads]][link-downloads]
 
-Jack Henry ProfitStars provides an API for handling ACH transactions. This package is a Laravel wrapper
+Jack Henry ProfitStars provides an API for handling ACH transactions. This package is a Laravel/Lumen wrapper
 to access these transactions.
 
 The package is currently not exhaustive in terms of what is available from the API; I have only implemented
@@ -24,14 +24,26 @@ After installing via Composer, add the service provider:
 ``` php
 jdavidbakr\ProfitStars\ProfitStarsServiceProvider::class
 ```
+###Laravel Configuration
 
-Then publish the config file:
+Publish the config file:
 
 ``` bash
 php artisan vendor:publish
 ```
 
-This will place a file in the config directory that will manage your connection credentials.
+This will place a file in the config directory that will manage your connection credentials. 
+
+###Lumen Configuration
+
+Add the following to your .env file:
+
+```
+PROFIT_STARS_STORE_ID=YOUR STORE ID
+PROFIT_STARS_STORE_KEY=YOUR STORE KEY
+PROFIT_STARS_ENTITY_ID=YOUR ENTITY ID
+PROFIT_STARS_LOCATION_ID=YOUR LOCATION ID
+```
 
 ## Usage
 
