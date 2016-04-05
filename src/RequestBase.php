@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace jdavidbakr\ProfitStars;
 
@@ -18,11 +18,11 @@ abstract class RequestBase {
 
         try {
             $response = $client->post($this->endpoint,[
-                    'headers'=>[
-                        'Content-Type'=>'text/xml;charset=UTF-8',
-                    ],
-                    'body'=>$view->render(),
-                ]);
+                'headers'=>[
+                    'Content-Type'=>'text/xml;charset=UTF-8',
+                ],
+                'body'=>$view->render(),
+            ]);
         } catch (ServerException $e) {
             $response = $e->getResponse();
         }

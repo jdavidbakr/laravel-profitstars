@@ -15,9 +15,11 @@ class ProfitStarsServiceProvider extends ServiceProvider
     {
         $this->loadViewsFrom(__DIR__.'/views', 'profitstars');
 
-        $this->publishes([
-            __DIR__.'/../config/profit-stars.php' => config_path('profit-stars.php')
-        ], 'config');
+        if (function_exists('config_path')) {
+            $this->publishes([
+                __DIR__.'/../config/profit-stars.php' => config_path('profit-stars.php')
+            ], 'config');
+        }
     }
 
     /**
