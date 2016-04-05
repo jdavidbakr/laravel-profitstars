@@ -2,11 +2,11 @@
 	<soapenv:Header/>
 	<soapenv:Body>
 		<pv:AuthorizeTransaction>
-			<pv:storeId>{{ config('profit-stars.store-id') }}</pv:storeId>
-			<pv:storeKey>{{ config('profit-stars.store-key') }}</pv:storeKey>
+			<pv:storeId>{{ config('profit-stars.store-id', env('PROFIT_STARS_STORE_ID')) }}</pv:storeId>
+			<pv:storeKey>{{ config('profit-stars.store-key', env('PROFIT_STARS_STORE_KEY')) }}</pv:storeKey>
 			<pv:transaction>
-				<pv:EntityId>{{ config('profit-stars.entity-id') }}</pv:EntityId>
-				<pv:LocationId>{{ config('profit-stars.location-id') }}</pv:LocationId>
+				<pv:EntityId>{{ config('profit-stars.entity-id', env('PROFIT_STARS_ENTITY_ID')) }}</pv:EntityId>
+				<pv:LocationId>{{ config('profit-stars.location-id', env('PROFIT_STARS_LOCATION_ID')) }}</pv:LocationId>
 				<pv:PaymentOrigin>{{ $trans->PaymentOrigin }}</pv:PaymentOrigin>
 				<pv:AccountType>{{ $trans->AccountType }}</pv:AccountType>
 				<pv:OperationType>Auth</pv:OperationType>
