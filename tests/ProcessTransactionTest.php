@@ -13,11 +13,6 @@ class ProcessTransactionTest extends TestCase
         $this->object = new ProcessTransaction;
     }
 
-    /**
-     * A basic functional test example.
-     *
-     * @return void
-     */
     public function testTestConnection()
     {
         $this->assertTrue($this->object->TestConnection());
@@ -113,5 +108,4 @@ class ProcessTransactionTest extends TestCase
         $this->assertFalse($this->object->RefundTransaction(), $this->object->ResponseMessage);
         $this->assertEquals($this->object->ResponseMessage, "Server was unable to process request. ---> An exception of type System.ArgumentException was thrown. The message was Transaction is in a state that cannot be refunded\nParameter name: originalReferenceNumber");
     }
-
 }
