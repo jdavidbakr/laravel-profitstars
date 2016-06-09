@@ -1,9 +1,5 @@
 # laravel-profitstars
 
-[![Latest Version on Packagist][ico-version]][link-packagist]
-[![Software License][ico-license]](LICENSE.md)
-[![Total Downloads][ico-downloads]][link-downloads]
-
 Jack Henry ProfitStars provides an API for handling ACH transactions. This package is a Laravel/Lumen wrapper
 to access these transactions.
 
@@ -64,6 +60,7 @@ if($proc->TestCredentials()) {
 
 ## Usage - Processing Transactions
 
+``` php
 $proc = new \jdavidbakr\ProfitStars\ProcessTransaction;
 $trans = new \jdavidbakr\ProfitStars\WSTransaction;
 
@@ -108,7 +105,7 @@ if($proc->RefundTransaction()) {
 
 ## Usage - Recurring Payments
 
-```
+``` php
 
 $proc = new \jdavidbakr\ProfitStars\ProcessTransaction;
 $recur = new \jdavidbakr\ProfitStars\WSRecurr;
@@ -175,11 +172,6 @@ The Frequency and the PaymentDay define the schedule of the recurring payment.  
 * Twice_a_Month: 1 = 1st and 15th, 2 = 15th and last
 * Once_a_Week: 0 - Sun, 1 = Mon, ... 5 = Fri, 6 = Sat
 * Every_2_Weeks: same as Once_a_Week
-
-## Change log
-
-Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
-
 
 ## Contributing
 
