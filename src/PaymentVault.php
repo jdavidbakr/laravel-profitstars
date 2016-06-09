@@ -96,12 +96,12 @@ class PaymentVault extends RequestBase {
             $this->ResponseMessage = $this->faultstring;
             return false;
         }
-        if(!$xml->SetupRecurringPaymentResponse || (string)$xml->SetupRecurringPaymentResponse->returnValue[0] != 'Success') {
-            if($xml->SetupRecurringPaymentResponse && (string)$xml->SetupRecurringPaymentResponse->ResponseMessage[0]) {
+        if(!$xml->SetupRecurringPaymentResult || (string)$xml->SetupRecurringPaymentResult->returnValue[0] != 'Success') {
+            if($xml->SetupRecurringPaymentResult && (string)$xml->SetupRecurringPaymentResult->message[0]) {
                 // Not sure if this is working, so I'm going to throw the XML into the logs in case
                 // I need to come back and see what it looks like.
                 logger($xml->asXML());
-                $this->ResponseMessage = (string)$xml->SetupRecurringPaymentResponse->ResponseMessage[0];
+                $this->ResponseMessage = (string)$xml->SetupRecurringPaymentResult->message[0];
             } else {
                 // Had an error with the call that was not captured above, so let's log it and throw a 500 error for future development
                 logger:info($xml->asXML());

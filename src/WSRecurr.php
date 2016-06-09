@@ -12,8 +12,8 @@ class WSRecurr {
 	public $PaymentDay;
 	public $StartDate;
 	public $NumPayments;
-	public $PaymentsToDate;
-	public $NotificationMethod;
+	public $PaymentsToDate = 0;
+	public $NotificationMethod = 'Merchant_Notify';
 	public $NextPaymentDate;
 	public $Enabled = 1;
 	public $RecurringReferenceID;

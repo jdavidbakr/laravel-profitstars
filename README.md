@@ -147,12 +147,13 @@ if($proc->RegisterAccount($account)) {
 $recur->CustomerNumber = 12345; // What you used in RegisterCustomer
 $recur->AccountReferenceID = 67890; // What you used in RegisterAccount
 $recur->Amount = 1.23; // The amount that will be charged each time
+$recur->InvoiceNumber = 09876; // Optional
 $recur->Frequency = 'Once_a_Month'; // Once_a_Month, Twice_a_Month, Once_a_Week, Every_2_Weeks, Once_a_Quarter, Twice_a_Year, Once_a_Year
 $recur->PaymentDay = 1; // See notes below
 $recur->NumPayments = 10; // Valid values are 1 - 100, or 999 for indefinite
 $recur->PaymentsToDate = 0; // Should be zero
-$recur->NextPaymentDate = '2015-11-04';
-$recur->RecurringReferenceID = 12345; // Optional value if you want to keep track of this in the future
+$recur->NextPaymentDate = '2015-11-04'; // Must not be before tomorrow
+$recur->RecurringReferenceID = 12345; // Must set a value here like you did in the customer and account calls
 if($proc->SetupRecurringPayment($recur)) {
 	// Success
 } else {

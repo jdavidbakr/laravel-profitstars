@@ -50,15 +50,18 @@ class PaymentVaultTest extends TestCase
         $this->assertTrue($this->object->RegisterAccount($account), $this->object->ResponseMessage);
 
         // 3. Set up a recurring payment
+        $start_date = \Carbon\Carbon::now()->addMonth(1);
         $recur = new WSRecurr;
         $recur->CustomerNumber = $customer_number;
         $recur->AccountReferenceID = $account_reference_id;
         $recur->Amount = 100;
         $recur->Frequency = 'Once_a_Month';
-        $recur->PaymentDay = '5';
-        $recur->StartDate = \Carbon\Carbon::now()->format("Y-m-d");
+        $recur->PaymentDay = $start_date->day;
+        $recur->StartDate = $start_date->format("Y-m-d");
+        $recur->NextPaymentDate = $start_date->format("Y-m-d");
         $recur->NumPayments = 5;
         $recur->PaymentsToDate = 0;
+        $recur->RecurringReferenceID = str_random(50);
 
         $this->assertTrue($this->object->SetupRecurringPayment($recur), $this->object->ResponseMessage);
     }
