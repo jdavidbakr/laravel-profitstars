@@ -106,6 +106,7 @@ class ProcessTransactionTest extends TestCase
         $this->object->ReferenceNumber = $ReferenceNumber;
         // We can't refund the transaction yet because it's not cleared, so we should get the following exception when we try
         $this->assertFalse($this->object->RefundTransaction(), $this->object->ResponseMessage);
-        $this->assertEquals($this->object->ResponseMessage, "Server was unable to process request. ---> An exception of type System.ArgumentException was thrown. The message was Transaction is in a state that cannot be refunded\nParameter name: originalReferenceNumber");
+        // $this->assertEquals($this->object->ResponseMessage, "Server was unable to process request. ---> An exception of type System.ArgumentException was thrown. The message was Transaction is in a state that cannot be refunded\nParameter name: originalReferenceNumber");
+        $this->assertEquals($this->object->ResponseMessage, "Transaction is in a state that cannot be refunded");
     }
 }
