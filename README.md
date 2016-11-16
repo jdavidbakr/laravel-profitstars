@@ -173,6 +173,19 @@ The Frequency and the PaymentDay define the schedule of the recurring payment.  
 * Once_a_Week: 0 - Sun, 1 = Mon, ... 5 = Fri, 6 = Sat
 * Every_2_Weeks: same as Once_a_Week
 
+## Usage - Transaction Reporting
+
+``` php
+
+$reporter = new \jdavidbakr\ProfitStars\TransactionReporting;
+
+// Retrieve a collection of \jdavidbakr\ProfitStars\CreditAndDebitReportsResponse
+$start_date = Carbon::now()->subDays(90); // Max 90 days from start to end
+$end_date = Carbon::now();
+$batches = $reporter->CreditAndDebirReports($start_date, $end_date);
+
+```
+
 ## Contributing
 
 Please see [CONTRIBUTING](CONTRIBUTING.md) and [CONDUCT](CONDUCT.md) for details.
