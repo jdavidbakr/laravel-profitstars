@@ -182,7 +182,7 @@ $reporter = new \jdavidbakr\ProfitStars\TransactionReporting;
 // Retrieve a collection of \jdavidbakr\ProfitStars\CreditAndDebitReportsResponse
 $start_date = Carbon::now()->subDays(90); // Max 90 days from start to end
 $end_date = Carbon::now();
-$batches = $reporter->CreditAndDebirReports($start_date, $end_date);
+$batches = $reporter->CreditAndDebitReports($start_date, $end_date);
 
 // Retrieve a collection of \jdavidbakr\ProfitStars\WSSettlementBatch objects for a batch
 $batch = $batches->first();
