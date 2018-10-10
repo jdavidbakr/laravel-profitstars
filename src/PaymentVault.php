@@ -2,8 +2,8 @@
 
 namespace jdavidbakr\ProfitStars;
 
-class PaymentVault extends RequestBase {
-
+class PaymentVault extends RequestBase
+{
     protected $endpoint = 'https://ws.eps.profitstars.com/PV/PaymentVault.asmx';
     public $ReferenceNumber;
     public $ResponseMessage;
@@ -15,7 +15,7 @@ class PaymentVault extends RequestBase {
     {
         $view = view('profitstars::payment-vault.test-connection');
         $xml = $this->Call($view);
-        if(!$xml) {
+        if (!$xml) {
             abort(500, $this->faultstring);
         }
         return (bool)$xml->TestConnectionResult[0];
@@ -25,7 +25,7 @@ class PaymentVault extends RequestBase {
     {
         $view = view('profitstars::payment-vault.test-credentials');
         $xml = $this->Call($view);
-        if(!$xml) {
+        if (!$xml) {
             abort(500, $this->faultstring);
         }
         return $xml->TestCredentialsResult[0]->returnValue[0] == 'Success';
@@ -38,12 +38,12 @@ class PaymentVault extends RequestBase {
             ]);
         // dd($view->render());
         $xml = $this->Call($view);
-        if(!$xml) {
+        if (!$xml) {
             $this->ResponseMessage = $this->faultstring;
             return false;
         }
-        if(!$xml->RegisterCustomerResult || (string)$xml->RegisterCustomerResult->returnValue[0] != 'Success') {
-            if($xml->RegisterCustomerResult && (string)$xml->RegisterCustomerResult->ResponseMessage[0]) {
+        if (!$xml->RegisterCustomerResult || (string)$xml->RegisterCustomerResult->returnValue[0] != 'Success') {
+            if ($xml->RegisterCustomerResult && (string)$xml->RegisterCustomerResult->ResponseMessage[0]) {
                 // Not sure if this is working, so I'm going to throw the XML into the logs in case
                 // I need to come back and see what it looks like.
                 logger($xml->asXML());
@@ -65,12 +65,12 @@ class PaymentVault extends RequestBase {
             ]);
         // dd($view->render());
         $xml = $this->Call($view);
-        if(!$xml) {
+        if (!$xml) {
             $this->ResponseMessage = $this->faultstring;
             return false;
         }
-        if(!$xml->RegisterAccountResult || (string)$xml->RegisterAccountResult->returnValue[0] != 'Success') {
-            if($xml->RegisterAccountResult && (string)$xml->RegisterAccountResult->ResponseMessage[0]) {
+        if (!$xml->RegisterAccountResult || (string)$xml->RegisterAccountResult->returnValue[0] != 'Success') {
+            if ($xml->RegisterAccountResult && (string)$xml->RegisterAccountResult->ResponseMessage[0]) {
                 // Not sure if this is working, so I'm going to throw the XML into the logs in case
                 // I need to come back and see what it looks like.
                 logger($xml->asXML());
@@ -92,12 +92,12 @@ class PaymentVault extends RequestBase {
             ]);
         // dd($view->render());
         $xml = $this->Call($view);
-        if(!$xml) {
+        if (!$xml) {
             $this->ResponseMessage = $this->faultstring;
             return false;
         }
-        if(!$xml->SetupRecurringPaymentResult || (string)$xml->SetupRecurringPaymentResult->returnValue[0] != 'Success') {
-            if($xml->SetupRecurringPaymentResult && (string)$xml->SetupRecurringPaymentResult->message[0]) {
+        if (!$xml->SetupRecurringPaymentResult || (string)$xml->SetupRecurringPaymentResult->returnValue[0] != 'Success') {
+            if ($xml->SetupRecurringPaymentResult && (string)$xml->SetupRecurringPaymentResult->message[0]) {
                 // Not sure if this is working, so I'm going to throw the XML into the logs in case
                 // I need to come back and see what it looks like.
                 logger($xml->asXML());
@@ -111,5 +111,4 @@ class PaymentVault extends RequestBase {
         }
         return true;
     }
-
 }

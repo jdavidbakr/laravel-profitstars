@@ -65,5 +65,4 @@ class PaymentVaultTest extends TestCase
 
         $this->assertTrue($this->object->SetupRecurringPayment($recur), $this->object->ResponseMessage);
     }
-
 }

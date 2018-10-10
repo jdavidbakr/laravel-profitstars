@@ -2,8 +2,8 @@
 
 namespace jdavidbakr\ProfitStars;
 
-class ProcessTransaction extends RequestBase {
-
+class ProcessTransaction extends RequestBase
+{
     protected $endpoint = 'https://ws.eps.profitstars.com/PV/TransactionProcessing.asmx';
     public $ReferenceNumber;
     public $ResponseMessage;
@@ -15,7 +15,7 @@ class ProcessTransaction extends RequestBase {
     {
         $view = view('profitstars::process-transaction.test-connection');
         $xml = $this->Call($view);
-        if(!$xml) {
+        if (!$xml) {
             abort(500, $this->faultstring);
         }
         return (bool)$xml->TestConnectionResult[0];
@@ -25,7 +25,7 @@ class ProcessTransaction extends RequestBase {
     {
         $view = view('profitstars::process-transaction.test-credentials');
         $xml = $this->Call($view);
-        if(!$xml) {
+        if (!$xml) {
             abort(500, $this->faultstring);
         }
         return $xml->TestCredentialsResult[0]->returnValue[0] == 'Success';
@@ -33,16 +33,16 @@ class ProcessTransaction extends RequestBase {
 
     public function AuthorizeTransaction(WSTransaction $trans)
     {
-        $view = view('profitstars::process-transaction.authorize-transaction',[
+        $view = view('profitstars::process-transaction.authorize-transaction', [
             'trans'=>$trans,
         ]);
         $xml = $this->Call($view);
-        if(!$xml) {
+        if (!$xml) {
             $this->ResponseMessage = $this->faultstring;
             return false;
         }
-        if(!$xml->AuthorizeTransactionResult[0] || (string)$xml->AuthorizeTransactionResult[0]->Success[0] != 'true') {
-            if($xml->AuthorizeTransactionResult[0] && (string)$xml->AuthorizeTransactionResult[0]->ResponseMessage[0]) {
+        if (!$xml->AuthorizeTransactionResult[0] || (string)$xml->AuthorizeTransactionResult[0]->Success[0] != 'true') {
+            if ($xml->AuthorizeTransactionResult[0] && (string)$xml->AuthorizeTransactionResult[0]->ResponseMessage[0]) {
                 // Not sure if this is working, so I'm going to throw the XML into the logs in case
                 // I need to come back and see what it looks like.
                 logger($xml->asXML());
@@ -64,17 +64,17 @@ class ProcessTransaction extends RequestBase {
      */
     public function CaptureTransaction($amount)
     {
-        $view = view('profitstars::process-transaction.capture-transaction',[
+        $view = view('profitstars::process-transaction.capture-transaction', [
             'captureAmount'=>$amount,
             'originalReferenceNumber'=>$this->ReferenceNumber,
         ]);
         $xml = $this->Call($view);
-        if(!$xml) {
+        if (!$xml) {
             $this->ResponseMessage = $this->faultstring;
             return false;
         }
-        if(!$xml->CaptureTransactionResult[0] || (string)$xml->CaptureTransactionResult[0]->Success[0] != 'true') {
-            if($xml->CaptureTransactionResult[0] && (string)$xml->CaptureTransactionResult[0]->ResponseMessage[0]) {
+        if (!$xml->CaptureTransactionResult[0] || (string)$xml->CaptureTransactionResult[0]->Success[0] != 'true') {
+            if ($xml->CaptureTransactionResult[0] && (string)$xml->CaptureTransactionResult[0]->ResponseMessage[0]) {
                 // Not sure if this is working, so I'm going to throw the XML into the logs in case
                 // I need to come back and see what it looks like.
                 logger($xml->asXML());
@@ -93,16 +93,16 @@ class ProcessTransaction extends RequestBase {
 
     public function VoidTransaction()
     {
-        $view = view('profitstars::process-transaction.void-transaction',[
+        $view = view('profitstars::process-transaction.void-transaction', [
             'originalReferenceNumber'=>$this->ReferenceNumber,
         ]);
         $xml = $this->Call($view);
-        if(!$xml) {
+        if (!$xml) {
             $this->ResponseMessage = $this->faultstring;
             return false;
         }
-        if(!$xml->VoidTransactionResult[0] || (string)$xml->VoidTransactionResult[0]->Success[0] != 'true') {
-            if($xml->VoidTransactionResult[0] && (string)$xml->VoidTransactionResult[0]->ResponseMessage[0]) {
+        if (!$xml->VoidTransactionResult[0] || (string)$xml->VoidTransactionResult[0]->Success[0] != 'true') {
+            if ($xml->VoidTransactionResult[0] && (string)$xml->VoidTransactionResult[0]->ResponseMessage[0]) {
                 // Not sure if this is working, so I'm going to throw the XML into the logs in case
                 // I need to come back and see what it looks like.
                 logger($xml->asXML());
@@ -123,17 +123,17 @@ class ProcessTransaction extends RequestBase {
      */
     public function RefundTransaction()
     {
-        $view = view('profitstars::process-transaction.refund-transaction',[
+        $view = view('profitstars::process-transaction.refund-transaction', [
             'originalReferenceNumber'=>$this->ReferenceNumber,
         ]);
         // dd($view->render());
         $xml = $this->Call($view);
-        if(!$xml) {
+        if (!$xml) {
             $this->ResponseMessage = $this->faultstring;
             return false;
         }
-        if(!$xml->RefundTransactionResult[0] || (string)$xml->RefundTransactionResult[0]->Success[0] != 'true') {
-            if($xml->RefundTransactionResult[0] && (string)$xml->RefundTransactionResult[0]->ResponseMessage[0]) {
+        if (!$xml->RefundTransactionResult[0] || (string)$xml->RefundTransactionResult[0]->Success[0] != 'true') {
+            if ($xml->RefundTransactionResult[0] && (string)$xml->RefundTransactionResult[0]->ResponseMessage[0]) {
                 // Not sure if this is working, so I'm going to throw the XML into the logs in case
                 // I need to come back and see what it looks like.
                 logger($xml->asXML());
@@ -150,5 +150,4 @@ class ProcessTransaction extends RequestBase {
         $this->ReferenceNumber = (string)$xml->RefundTransactionResult[0]->ReferenceNumber[0];
         return true;
     }
-
 }

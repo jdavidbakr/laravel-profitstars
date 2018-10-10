@@ -4,30 +4,30 @@ namespace jdavidbakr\ProfitStars;
 
 use Carbon\Carbon;
 
-class TransactionReporting extends RequestBase {
-
+class TransactionReporting extends RequestBase
+{
     protected $endpoint = 'https://ws.eps.profitstars.com/PV/TransactionReporting.asmx';
 
     /**
      * Retrieves the credit and debit reports data
-     * @param Carbon $start_date 
-     * @param Carbon $end_date   
+     * @param Carbon $start_date
+     * @param Carbon $end_date
      * @return Collection of jdavidbakr\ProfitStars\CreditAndDebitReportsResult
      */
     public function CreditAndDebitReports(Carbon $start_date, Carbon $end_date)
     {
-        $view = view('profitstars::transaction-reporting.credit-and-debit-reports',[
+        $view = view('profitstars::transaction-reporting.credit-and-debit-reports', [
                 'beginDate'=>$start_date,
                 'endDate'=>$end_date,
             ]);
         $xml = $this->call($view);
-        if(!$xml) {
+        if (!$xml) {
             $this->ResponseMessage = $this->faultstring;
             return null;
         }
         $batches = collect();
-        if($xml->CreditandDebitReportsResult[0]->children('diffgr',true)[0]->children()[0]) {
-            foreach($xml->CreditandDebitReportsResult[0]->children('diffgr',true)[0]->children()[0]->Table as $table) {
+        if ($xml->CreditandDebitReportsResult[0]->children('diffgr', true)[0]->children()[0]) {
+            foreach ($xml->CreditandDebitReportsResult[0]->children('diffgr', true)[0]->children()[0]->Table as $table) {
                 $response = new CreditAndDebitReportsResponse;
                 $response->batchStatus = (string)$table->BatchStatus;
                 $response->effectiveDate = Carbon::parse($table->EffectiveDate);
@@ -42,16 +42,16 @@ class TransactionReporting extends RequestBase {
 
     public function CreditsAndDebitsTransactionDetailReport($batchId)
     {
-        $view = view('profitstars::transaction-reporting.credit-and-debit-transaction-detail-reports',[
+        $view = view('profitstars::transaction-reporting.credit-and-debit-transaction-detail-reports', [
                 'batchId'=>$batchId,
             ]);
         $xml = $this->call($view);
-        if(!$xml) {
+        if (!$xml) {
             $this->ResponseMessage = $this->faultstring;
             return null;
         }
         $transactions = collect();
-        foreach($xml->CreditsandDebitsTransactionDetailReportResult[0]->WSSettlementBatch as $item) {
+        foreach ($xml->CreditsandDebitsTransactionDetailReportResult[0]->WSSettlementBatch as $item) {
             $settlement_batch = new WSSettlementBatch;
             $transaction_detail = new WSTransactionDetail;
 

@@ -6,8 +6,8 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ServerException;
 use SimpleXMLElement;
 
-abstract class RequestBase {
-
+abstract class RequestBase
+{
     protected $endpoint;
     public $faultcode;
     public $faultstring;
@@ -17,7 +17,7 @@ abstract class RequestBase {
         $client = new Client();
 
         try {
-            $response = $client->post($this->endpoint,[
+            $response = $client->post($this->endpoint, [
                 'headers'=>[
                     'Content-Type'=>'text/xml;charset=UTF-8',
                 ],
@@ -28,11 +28,11 @@ abstract class RequestBase {
         }
         $body = $response->getBody();
         $xml = new SimpleXMLElement((string)$body);
-        $body = $xml->children('soap',true)->Body;
-        $fault = $body->children('soap',true)->Fault;
-        if($body->children() && $body->children()->children()) {
+        $body = $xml->children('soap', true)->Body;
+        $fault = $body->children('soap', true)->Fault;
+        if ($body->children() && $body->children()->children()) {
             return $body->children()->children();
-        } else if ($fault) {
+        } elseif ($fault) {
             $this->faultcode = (string)$fault->children()->faultcode[0];
             $this->faultstring = (string)$fault->children()->faultstring[0];
             return false;
@@ -40,5 +40,4 @@ abstract class RequestBase {
             abort(500, "Unknown SOAP response");
         }
     }
-
 }
