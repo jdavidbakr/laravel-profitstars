@@ -1,43 +1,45 @@
 {
-    "name": "jdavidbakr/laravel-profitstars",
-    "description": "A service that processes ACH transactions throgh Jack Henry's ProfitStars API",
-    "keywords": [
-        "ACH",
-        "ProfitStars"
-    ],
-    "homepage": "https://github.com/jdavidbakr/ProfitStars",
-    "license": "MIT",
-    "authors": [{
-        "name": ":J David Baker",
-        "email": "me@jdavidbaker.com",
-        "homepage": "http://www.jdavidbaker.com",
-        "role": "Developer"
-    }],
-    "require": {
-        "illuminate/support": "~5.1|6.*",
-        "php": ">=5.3.0",
-        "guzzlehttp/guzzle": "~5.3|~6.0.1|~6.1"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "4.*",
-        "scrutinizer/ocular": "~1.1"
-    },
-    "autoload": {
-        "psr-4": {
-            "jdavidbakr\\ProfitStars\\": "src"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "jdavidbakr\\ProfitStars\\Test\\": "tests"
-        }
-    },
-    "scripts": {
-        "test": "phpunit"
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0-dev"
-        }
+  "name": "jdavidbakr/laravel-profitstars",
+  "description": "A service that processes ACH transactions throgh Jack Henry's ProfitStars API",
+  "keywords": [
+    "ACH",
+    "ProfitStars"
+  ],
+  "homepage": "https://github.com/jdavidbakr/ProfitStars",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": ":J David Baker",
+      "email": "me@jdavidbaker.com",
+      "homepage": "http://www.jdavidbaker.com",
+      "role": "Developer"
     }
+  ],
+  "require": {
+    "illuminate/support": "~5.1|6.*|7.*",
+    "php": ">=5.3.0",
+    "guzzlehttp/guzzle": "~5.3|~6.0.1|~6.1"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^8.5",
+    "scrutinizer/ocular": "~1.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "jdavidbakr\\ProfitStars\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "jdavidbakr\\ProfitStars\\Test\\": "tests"
+    }
+  },
+  "scripts": {
+    "test": "phpunit"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0-dev"
+    }
+  }
 }
