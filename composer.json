@@ -19,8 +19,10 @@
     "guzzlehttp/guzzle": "~5.3|~6.0.1|~6.1|~7.0.1"
   },
   "require-dev": {
+    "orchestra/testbench": "~3.0|~4.0|~5.0|6.x-dev",
     "phpunit/phpunit": "^8.5",
-    "scrutinizer/ocular": "~1.1"
+    "scrutinizer/ocular": "~1.1",
+    "mockery/mockery": "^1.4"
   },
   "autoload": {
     "psr-4": {

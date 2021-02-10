@@ -2,6 +2,10 @@
 
 namespace jdavidbakr\ProfitStars;
 
+use jdavidbakr\ProfitStars\Exceptions\RegisterAccountException;
+use jdavidbakr\ProfitStars\Exceptions\RegisterCustomerException;
+use jdavidbakr\ProfitStars\Exceptions\SetupRecurringPaymentException;
+
 class PaymentVault extends RequestBase
 {
     protected $endpoint = 'https://ws.eps.profitstars.com/PV/PaymentVault.asmx';
@@ -36,7 +40,6 @@ class PaymentVault extends RequestBase
         $view = view('profitstars::payment-vault.register-customer', [
                 'customer'=>$customer,
             ]);
-        // dd($view->render());
         $xml = $this->Call($view);
         if (!$xml) {
             $this->ResponseMessage = $this->faultstring;
@@ -51,7 +54,7 @@ class PaymentVault extends RequestBase
             } else {
                 // Had an error with the call that was not captured above, so let's log it and throw a 500 error for future development
                 logger:info($xml->asXML());
-                abort(500, "RegisterCustomer error occurred");
+                throw new RegisterCustomerException($xml->asXML());
             }
             return false;
         }
@@ -78,7 +81,7 @@ class PaymentVault extends RequestBase
             } else {
                 // Had an error with the call that was not captured above, so let's log it and throw a 500 error for future development
                 logger:info($xml->asXML());
-                abort(500, "RegisterAccount error occurred");
+                throw new RegisterAccountException($xml->asXML());
             }
             return false;
         }
@@ -105,7 +108,7 @@ class PaymentVault extends RequestBase
             } else {
                 // Had an error with the call that was not captured above, so let's log it and throw a 500 error for future development
                 logger:info($xml->asXML());
-                abort(500, "SetupRecurringPayment error occurred");
+                throw new SetupRecurringPaymentException($xml->asXML());
             }
             return false;
         }

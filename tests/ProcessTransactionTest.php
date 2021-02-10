@@ -1,13 +1,18 @@
 <?php
 
+namespace jdavidbakr\ProfitStars\Test;
+
+use Illuminate\Support\Str;
 use jdavidbakr\ProfitStars\ProcessTransaction;
 use jdavidbakr\ProfitStars\WSTransaction;
+use Mockery;
+use Psr\Http\Message\ResponseInterface;
 
-class ProcessTransactionTest extends TestCase
+class ProcessTransactionTest extends BaseTestCase
 {
     protected $object;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->object = new ProcessTransaction;
@@ -15,98 +20,171 @@ class ProcessTransactionTest extends TestCase
 
     public function testTestConnection()
     {
+        $this->guzzle->shouldReceive('post')
+            ->once()
+            ->andReturn(Mockery::mock(ResponseInterface::class, [
+                'getBody'=>'<?xml version="1.0" encoding="utf-8"?>
+                <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <soap:Body>
+                        <TestConnectionResponse xmlns="https://ssl.selectpayment.com/PV">
+                            <TestConnectionResult>true</TestConnectionResult>
+                        </TestConnectionResponse>
+                    </soap:Body>
+                </soap:Envelope>'
+            ]));
         $this->assertTrue($this->object->TestConnection());
     }
 
     public function testTestCredentials()
     {
+        $this->guzzle->shouldReceive('post')
+            ->once()
+            ->andReturn(Mockery::mock(ResponseInterface::class, [
+                'getBody'=>'<?xml version="1.0" encoding="utf-8"?>
+                <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <soap:Body>
+                        <TestCredentialsResponse xmlns="https://ssl.selectpayment.com/PV">
+                            <TestCredentialsResult>
+                                <returnValue>Success</returnValue>
+                            </TestCredentialsResult>
+                        </TestCredentialsResponse>
+                    </soap:Body>
+                </soap:Envelope>'
+            ]));
         $this->assertTrue($this->object->TestCredentials());
     }
 
     public function testAuthorizeTransactionFailure()
     {
+        $this->guzzle->shouldReceive('post')
+            ->once()
+            ->andReturn(Mockery::mock(ResponseInterface::class, [
+                'getBody'=>'<?xml version="1.0" encoding="utf-8"?>
+                <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <soap:Body>
+                        <AuthorizeTransactionResponse xmlns="https://ssl.selectpayment.com/PV">
+                            <AuthorizeTransactionResult>
+                                <Success>false</Success>
+                                <ResponseMessage>Error message</ResponseMessage>
+                            </AuthorizeTransactionResult>
+                        </AuthorizeTransactionResponse>
+                    </soap:Body>
+                </soap:Envelope>'
+            ]));
         // First attempt with an empty transaction
         $trans = new WSTransaction;
         $this->assertFalse($this->object->AuthorizeTransaction($trans));
-        $this->assertEquals($this->object->ResponseMessage, 'Server was unable to read request. ---> There is an error in XML document (14, 42). ---> The string \'\' is not a valid AllXsd value.');
-
-        // Now try with a trans that will fail
-        // I haven't been able to figure out how to get a trans to fail, so I'm hoping that what I have works? If not, I have it logging so we can identify how
-        // we might need to handle this in the future should it come up.
-        // $trans->RoutingNumber = 111000025;
-        // $trans->AccountNumber = 5637492437;
-        // $trans->TotalAmount = 9.95;
-        // $trans->TransactionNumber = str_random(10);
-        // $trans->NameOnAccount = str_random(10);
-        // $trans->EffectiveDate = \Carbon\Carbon::now()->format("Y-m-d");
-        // $this->assertFalse($this->object->AuthorizeTransaction($trans));
-        // dd($this->object->ResponseMessage);
+        $this->assertEquals($this->object->ResponseMessage, 'Error message');
     }
 
     public function testAuthorizeTransactionSuccess()
     {
+        $this->guzzle->shouldReceive('post')
+            ->once()
+            ->andReturn(Mockery::mock(ResponseInterface::class, [
+                'getBody'=>'<?xml version="1.0" encoding="utf-8"?>
+                <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <soap:Body>
+                        <AuthorizeTransactionResponse xmlns="https://ssl.selectpayment.com/PV">
+                            <AuthorizeTransactionResult>
+                                <Success>true</Success>
+                            </AuthorizeTransactionResult>
+                        </AuthorizeTransactionResponse>
+                    </soap:Body>
+                </soap:Envelope>'
+            ]));
         $trans = new WSTransaction;
         $trans->RoutingNumber = 111000025;
         $trans->AccountNumber = 5637492437;
         $trans->TotalAmount = 9.95;
-        $trans->TransactionNumber = str_random(10);
-        $trans->NameOnAccount = str_random(10);
+        $trans->TransactionNumber = Str::random(10);
+        $trans->NameOnAccount = Str::random(10);
         $trans->EffectiveDate = \Carbon\Carbon::now()->format("Y-m-d");
-        $this->assertTrue($this->object->AuthorizeTransaction($trans), $this->object->ResponseMessage);
+        $this->assertTrue($this->object->AuthorizeTransaction($trans));
     }
 
     public function testCaptureTransaction()
     {
+        $this->guzzle->shouldReceive('post')
+            ->once()
+            ->andReturn(Mockery::mock(ResponseInterface::class, [
+                'getBody'=>'<?xml version="1.0" encoding="utf-8"?>
+                <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <soap:Body>
+                        <CaptureTransactionResponse xmlns="https://ssl.selectpayment.com/PV">
+                            <CaptureTransactionResult>
+                                <Success>true</Success>
+                            </CaptureTransactionResult>
+                        </CaptureTransactionResponse>
+                    </soap:Body>
+                </soap:Envelope>'
+            ]));
         $trans = new WSTransaction;
         $trans->RoutingNumber = 111000025;
         $trans->AccountNumber = 5637492437;
         $trans->TotalAmount = 9.95;
-        $trans->TransactionNumber = str_random(10);
-        $trans->NameOnAccount = str_random(10);
+        $trans->TransactionNumber = Str::random(10);
+        $trans->NameOnAccount = Str::random(10);
         $trans->EffectiveDate = \Carbon\Carbon::now()->format("Y-m-d");
-        $this->assertTrue($this->object->AuthorizeTransaction($trans), $this->object->ResponseMessage);
 
         // Capture the transaction.  ReferenceNumber will carry through from Authorize.
-        $this->assertTrue($this->object->CaptureTransaction($trans->TotalAmount), $this->object->ResponseMessage);
+        $this->assertTrue($this->object->CaptureTransaction($trans->TotalAmount));
     }
 
     public function testVoidTransaction()
     {
+        $this->guzzle->shouldReceive('post')
+            ->once()
+            ->andReturn(Mockery::mock(ResponseInterface::class, [
+                'getBody'=>'<?xml version="1.0" encoding="utf-8"?>
+                <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <soap:Body>
+                        <VoidTransactionResponse xmlns="https://ssl.selectpayment.com/PV">
+                            <VoidTransactionResult>
+                                <Success>true</Success>
+                            </VoidTransactionResult>
+                        </VoidTransactionResponse>
+                    </soap:Body>
+                </soap:Envelope>'
+            ]));
         $trans = new WSTransaction;
         $trans->RoutingNumber = 111000025;
         $trans->AccountNumber = 5637492437;
         $trans->TotalAmount = 9.95;
-        $trans->TransactionNumber = str_random(10);
-        $trans->NameOnAccount = str_random(10);
+        $trans->TransactionNumber = Str::random(10);
+        $trans->NameOnAccount = Str::random(10);
         $trans->EffectiveDate = \Carbon\Carbon::now()->format("Y-m-d");
-        $this->assertTrue($this->object->AuthorizeTransaction($trans), $this->object->ResponseMessage);
 
-        $this->assertTrue($this->object->VoidTransaction(), $this->object->ResponseMessage);
-
-        // Seconrd attempt should fail
-        $this->assertFalse($this->object->VoidTransaction());
+        $this->assertTrue($this->object->VoidTransaction());
     }
 
     public function testRefundTransaction()
     {
+        $this->guzzle->shouldReceive('post')
+            ->once()
+            ->andReturn(Mockery::mock(ResponseInterface::class, [
+                'getBody'=>'<?xml version="1.0" encoding="utf-8"?>
+                <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <soap:Body>
+                        <RefundTransactionResponse xmlns="https://ssl.selectpayment.com/PV">
+                            <RefundTransactionResult>
+                                <Success>true</Success>
+                            </RefundTransactionResult>
+                        </RefundTransactionResponse>
+                    </soap:Body>
+                </soap:Envelope>'
+            ]));
         $trans = new WSTransaction;
         $trans->RoutingNumber = 111000025;
         $trans->AccountNumber = 5637492437;
         $trans->TotalAmount = 9.95;
-        $trans->TransactionNumber = str_random(10);
-        $trans->NameOnAccount = str_random(10);
+        $trans->TransactionNumber = Str::random(10);
+        $trans->NameOnAccount = Str::random(10);
         $trans->EffectiveDate = \Carbon\Carbon::now()->format("Y-m-d");
-        $this->assertTrue($this->object->AuthorizeTransaction($trans), $this->object->ResponseMessage);
         $ReferenceNumber = $this->object->ReferenceNumber;
-
-        // Capture the transaction.  ReferenceNumber will carry through from Authorize.
-        $this->assertTrue($this->object->CaptureTransaction($trans->TotalAmount), $this->object->ResponseMessage);
-
         // Refund the transaction.  We have to pass the original reference number.
         $this->object->ReferenceNumber = $ReferenceNumber;
-        // We can't refund the transaction yet because it's not cleared, so we should get the following exception when we try
-        $this->assertFalse($this->object->RefundTransaction(), $this->object->ResponseMessage);
-        // $this->assertEquals($this->object->ResponseMessage, "Server was unable to process request. ---> An exception of type System.ArgumentException was thrown. The message was Transaction is in a state that cannot be refunded\nParameter name: originalReferenceNumber");
-        $this->assertEquals($this->object->ResponseMessage, "Transaction is in a state that cannot be refunded");
+
+        $this->assertTrue($this->object->RefundTransaction());
     }
 }

@@ -14,7 +14,7 @@ abstract class RequestBase
 
     public function Call($view)
     {
-        $client = new Client();
+        $client = app(Client::class);
 
         try {
             $response = $client->post($this->endpoint, [

@@ -2,6 +2,11 @@
 
 namespace jdavidbakr\ProfitStars;
 
+use jdavidbakr\ProfitStars\Exceptions\AuthorizeTransactionException;
+use jdavidbakr\ProfitStars\Exceptions\CaptureTransactionException;
+use jdavidbakr\ProfitStars\Exceptions\ProcessTransactionException;
+use jdavidbakr\ProfitStars\Exceptions\RefundTransactionException;
+
 class ProcessTransaction extends RequestBase
 {
     protected $endpoint = 'https://ws.eps.profitstars.com/PV/TransactionProcessing.asmx';
@@ -16,7 +21,7 @@ class ProcessTransaction extends RequestBase
         $view = view('profitstars::process-transaction.test-connection');
         $xml = $this->Call($view);
         if (!$xml) {
-            abort(500, $this->faultstring);
+            throw new ProcessTransactionException($this->faultString);
         }
         return (bool)$xml->TestConnectionResult[0];
     }
@@ -26,7 +31,7 @@ class ProcessTransaction extends RequestBase
         $view = view('profitstars::process-transaction.test-credentials');
         $xml = $this->Call($view);
         if (!$xml) {
-            abort(500, $this->faultstring);
+            throw new ProcessTransactionException($this->faultString);
         }
         return $xml->TestCredentialsResult[0]->returnValue[0] == 'Success';
     }
@@ -50,7 +55,7 @@ class ProcessTransaction extends RequestBase
             } else {
                 // Had an error with the call that was not captured above, so let's log it and throw a 500 error for future development
                 logger:info($xml->asXML());
-                abort(500, "AuthorizeTransaction error occurred");
+                throw new AuthorizeTransactionException($xml->asXML());
             }
             return false;
         }
@@ -82,7 +87,7 @@ class ProcessTransaction extends RequestBase
             } else {
                 // Had an error with the call that was not captured above, so let's log it and throw a 500 error for future development
                 logger:info($xml->asXML());
-                abort(500, "CaptureTransaction error occurred");
+                throw new CaptureTransactionException($xml->asXML());
             }
             return false;
         }
@@ -110,7 +115,7 @@ class ProcessTransaction extends RequestBase
             } else {
                 // Had an error with the call that was not captured above, so let's log it and throw a 500 error for future development
                 logger:info($xml->asXML());
-                abort(500, "CaptureTransaction error occurred");
+                throw new VoidTransactionException($xml->asXML());
             }
             return false;
         }
@@ -141,7 +146,7 @@ class ProcessTransaction extends RequestBase
             } else {
                 // Had an error with the call that was not captured above, so let's log it and throw a 500 error for future development
                 logger:info($xml->asXML());
-                abort(500, "CaptureTransaction error occurred");
+                throw new RefundTransactionException($xml->asXML());
             }
             return false;
         }

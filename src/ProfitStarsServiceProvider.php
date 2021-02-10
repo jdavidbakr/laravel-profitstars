@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdavidbakr\ProfitStars;
+namespace jdavidbakr\ProfitStars;
 
 use Illuminate\Support\ServiceProvider;
 

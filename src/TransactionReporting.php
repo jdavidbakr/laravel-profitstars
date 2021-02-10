@@ -26,7 +26,7 @@ class TransactionReporting extends RequestBase
             return null;
         }
         $batches = collect();
-        if ($xml->CreditandDebitReportsResult[0]->children('diffgr', true)[0]->children()[0]) {
+        if ($xml->CreditandDebitReportsResult[0]->children('diffgr', true)[0]->children()) {
             foreach ($xml->CreditandDebitReportsResult[0]->children('diffgr', true)[0]->children()[0]->Table as $table) {
                 $response = new CreditAndDebitReportsResponse;
                 $response->batchStatus = (string)$table->BatchStatus;
